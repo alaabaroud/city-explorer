@@ -59,7 +59,9 @@ render (){
 </Form>
 <br>
 </br>
-<p>{this.state.displayName}</p>
+<p> City Name :{this.state.displayName}</p>
+<p> Latitude: {this.state.lat} </p>
+<p> Longitude: {this.state.lon}</p>
 { 
         this.state.showMap &&
         <img src={`https://maps.locationiq.com/v3/staticmap?key=pk.43fed3791d35ddb76aa14f749c6d3080&center=${this.state.lat},${this.state.lon}`} alt='map' />
