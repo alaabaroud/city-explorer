@@ -13,9 +13,12 @@ class App extends React.Component{
       displayName : '',
       lon : '',
       lat : '',
+      Results:'',
+      searchQuery: '',
       showMap: false,
       errorMsg : 'bad response',
-      displayErr : false
+      displayErr : false,
+      weather: []
     }
   }
 
@@ -33,6 +36,7 @@ class App extends React.Component{
       lat: Results.data[0].lat,
       showMap : true
     })
+    this.getWeather(Results.data[0].lat, Results.data[0].lon)
   }
   catch {
     this.setState({
@@ -41,6 +45,22 @@ class App extends React.Component{
     })
   }
   }
+
+  getweather = async (lat, lon) =>{
+  
+      try{
+        const weather = await axios.get(`${process.env.REACT_APP_SERVER}/weather`, { params: {latitude: lat, longitude: lon, searchQuery: this.state.searchQuery}});
+        this.setState({
+          weather: weather.data
+        })
+      } catch(error){
+        this.setState({
+          displayMap: false,
+          displayError: true,
+          errorMessage: error.response.status + ': ' + error.response.data.error 
+        })
+      }
+    } 
   
 render (){
   return(
@@ -71,6 +91,9 @@ render (){
        this.state.displayErr && 
        this.state.errorMsg 
        }
+
+
+       <p> weather={this.state.weather} </p>
    </>
   );
       }
