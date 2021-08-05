@@ -42,13 +42,16 @@ class App extends React.Component{
       showMap : true,
     })
   
-
-  const mURL = `http://localhost:3000/movies?city=${cityName}`
+    // const mKey= process.env.MOVIE_API_KEY
+  const mURL = `https://api.themoviedb.org/3/movie/550?api_key=4b557fce5a80bc4685790b5ceb6c8804&query=${cityName}`
   let moviesResult = await axios.get(mURL)
+  console.log(moviesResult);
   this.setState({
     movie : moviesResult.data
+    
   })
 }
+
 
 catch {
   this.setState({
