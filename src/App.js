@@ -4,8 +4,11 @@ import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 
 import Movies from "./components/Movies";
+// import Weather from './components/Weather'
+
 import './index.css';
 
+import "bootstrap/dist/css/bootstrap.min.css";
 
 
 
@@ -20,6 +23,7 @@ class App extends React.Component{
       showMap: false,
       errorMsg : 'bad response',
       displayErr : false,
+      weather : [],
 
       movie:[]
     }
@@ -34,24 +38,31 @@ class App extends React.Component{
 
     try {
     let Results = await axios.get (URL);
-    console.log(Results.data[0].display_name);
+    // console.log(Results.data[0].display_name);
     this.setState({
       displayName : Results.data[0].display_name,
       lon: Results.data[0].lon,
       lat: Results.data[0].lat,
       showMap : true,
     })
+
+    const WKey= process.env.WEATHER_API_KEY
+    const WURL = `https://api.weatherbit.io/v2.0/forecast/minutely?city=${cityName}&key=${WKey}`
+    let weatherResult = await axios.get(WURL)
+    this.setState({
+      weather : weatherResult.data,
+    
+    })
   
     // const mKey= process.env.MOVIE_API_KEY
   const mURL = `https://api.themoviedb.org/3/movie/550?api_key=4b557fce5a80bc4685790b5ceb6c8804&query=${cityName}`
   let moviesResult = await axios.get(mURL)
-  console.log(moviesResult);
   this.setState({
     movie : moviesResult.data
+
     
   })
 }
-
 
 catch {
   this.setState({
@@ -82,6 +93,7 @@ render (){
     Explore !
   </Button>
 </Form>
+
 <br>
 </br>
 <p> City Name :{this.state.displayName}</p>
@@ -93,6 +105,7 @@ render (){
       }
 
 
+{/* <Weather weather={this.state.weather} ></Weather> */}
 <Movies  movie={this.state.movie} ></Movies>
 
        { 
