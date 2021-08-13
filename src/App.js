@@ -1,4 +1,5 @@
 
+
 import React from 'react'
 import './App.css';
 
@@ -26,8 +27,10 @@ class App extends React.Component {
         weather: [],
         movies:[]
        
+
       }
     }
+
 
     getLocation = async(event) => {
         event.preventDefault();
@@ -139,3 +142,4 @@ class App extends React.Component {
     
     
     export default App;
+
