@@ -1,18 +1,13 @@
-import React from "react" ;
-import axios from 'axios'
-import Form from 'react-bootstrap/Form'
-import Button from 'react-bootstrap/Button'
-
-import Movies from "./components/Movies";
-// import Weather from './components/Weather'
-
-import './index.css';
-
+import React from 'react'
+import './App.css';
+import axios from 'axios';
 import "bootstrap/dist/css/bootstrap.min.css";
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
 
-
-
-class App extends React.Component{
+import Weather from './Components/Weather';
+import Movies from './Components/Movies'
+class App extends React.Component {
 
   constructor(props) {
     super(props);
@@ -21,67 +16,76 @@ class App extends React.Component{
       lon : '',
       lat : '',
       showMap: false,
-      errorMsg : 'bad response',
-      displayErr : false,
-      weather : [],
-
-      movie:[]
+      error : 'bad response',
+      showError : false,
+      
+      weather: [],
+      movies:[]
+     
     }
   }
 
-  getLocation = async (event) =>{
-    event.preventDefault();
-    let cityName = event.target.city.value;
-    console.log(cityName);
-    let URL= `https://eu1.locationiq.com/v1/search.php?key=pk.64b92780e3495103586ceb0307468a21&q=${cityName}&format=json`
+  
 
+  getLocation = async(event) => {
+    event.preventDefault();
+    console.log(process.env.REACT_APP_SERVER_URL);
+    let city = event.target.city.value;
+    console.log(city);
+
+    let URL= `https://us1.locationiq.com/v1/search.php?key=pk.b4047dd2b66352b18ad93e8d78889b18&q=${city}&format=json`
+    
 
     try {
-    let Results = await axios.get (URL);
-    // console.log(Results.data[0].display_name);
-    this.setState({
-      displayName : Results.data[0].display_name,
-      lon: Results.data[0].lon,
-      lat: Results.data[0].lat,
-      showMap : true,
-    })
+      let locResult = await axios.get(URL);
+      this.setState({
+        displayName : locResult.data[0].display_name,
+        lon: locResult.data[0].lon,
+        lat: locResult.data[0].lat,      
+        showMap : true,
+        
+      })
 
-    const WKey= process.env.WEATHER_API_KEY
-    const WURL = `https://api.weatherbit.io/v2.0/forecast/minutely?city=${cityName}&key=${WKey}`
-    let weatherResult = await axios.get(WURL)
-    this.setState({
-      weather : weatherResult.data,
-    
-    })
+
+      const urlServer = `${process.env.REACT_APP_SERVER_URL}/getWeather?lat=${this.state.lat}&lon=${this.state.lon}&cityName=${city}`
+      let weatherResult = await axios.get(urlServer)
+      this.setState({
+        weather : weatherResult.data,
+      
+      })
+      console.log(weatherResult, 'data from api')
+
+
+      const urlMovies = `${process.env.REACT_APP_SERVER_URL}/movies?city=${city}`
+      let moviesResult = await axios.get(urlMovies)
+      this.setState({
+        movies : moviesResult.data
+      })
+    }
+
+
   
-    // const mKey= process.env.MOVIE_API_KEY
-  const mURL = `https://api.themoviedb.org/3/movie/550?api_key=4b557fce5a80bc4685790b5ceb6c8804&query=${cityName}`
-  let moviesResult = await axios.get(mURL)
-  this.setState({
-    movie : moviesResult.data
+    catch {
+      this.setState({
+        showMap : false,
+        showerror : true,
+      
+      }
+      )
+    }
 
-    
-  })
-}
 
-catch {
-  this.setState({
-    displayMap : false,
-      displayErr : true
-  })
-}
-}
-  
+   }
+
+
+  render() {
 
 
 
+    return (
+      <>
 
-
-
-render (){
-  return(
-    <>
-      <h1> City Explorer</h1>
+<h1> City Explorer</h1>
       <Form onSubmit={this.getLocation}>
   <Form.Group>
     <Form.Label className='lable'>City Name</Form.Label>
@@ -93,7 +97,6 @@ render (){
     Explore !
   </Button>
 </Form>
-
 <br>
 </br>
 <p> City Name :{this.state.displayName}</p>
@@ -105,16 +108,35 @@ render (){
       }
 
 
-{/* <Weather weather={this.state.weather} ></Weather> */}
-<Movies  movie={this.state.movie} ></Movies>
+
+        <Weather weather={this.state.weather} ></Weather>
+        <Movies  movies={this.state.movies} ></Movies>
+       
+      
+
+
+       
+        
 
        { 
-       this.state.displayErr && 
-       this.state.errorMsg 
+       this.state.showerror && 
+       this.state.error 
        }
-   </>
-  );
-      }
-    }
+
+        
+      </>
+
+
+
+
+
+    )
+  }
+}
+
+
 
 export default App;
+
+
+
