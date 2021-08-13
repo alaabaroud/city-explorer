@@ -15,13 +15,17 @@ class App extends React.Component {
       displayName : '',
       lon : '',
       lat : '',
+      Results:'',
+      searchQuery: '',
       showMap: false,
+
       error : 'bad response',
       showError : false,
       
       weather: [],
       movies:[]
      
+
     }
     
   }
@@ -38,6 +42,7 @@ class App extends React.Component {
     
 
     try {
+
       let locResult = await axios.get(URL);
       this.setState({
         displayName : locResult.data[0].display_name,
@@ -124,16 +129,14 @@ class App extends React.Component {
        this.state.error 
        }
 
-        
-      </>
 
 
+       <p> weather={this.state.weather} </p>
+   </>
+  );
+      }
+    }
 
-
-
-    )
-  }
-}
 
 
 
