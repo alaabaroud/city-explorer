@@ -21,9 +21,9 @@ class Weather extends React.Component {
       <p>
       {' '}
       {element.date}.{' '}
-      </p>
+      
       {element.description} 
-
+      </p>
       </Card.Text>
     
     </Card.Body>
