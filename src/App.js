@@ -1,13 +1,10 @@
 
 import React from 'react'
 import './App.css';
-
 import axios from 'axios';
-
 import "bootstrap/dist/css/bootstrap.min.css";
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-
 import Weather from './Components/Weather';
 import Movies from './Components/Movies'
 
@@ -26,8 +23,10 @@ class App extends React.Component {
         weather: [],
         movies:[]
        
+
       }
     }
+
 
     getLocation = async(event) => {
         event.preventDefault();
@@ -75,10 +74,7 @@ class App extends React.Component {
           }
           )
         }
-    
-    
        }
-    
     
       render() {
     
@@ -109,29 +105,12 @@ class App extends React.Component {
             <img src={`https://maps.locationiq.com/v3/staticmap?key=pk.43fed3791d35ddb76aa14f749c6d3080&center=${this.state.lat},${this.state.lon}`} alt='map' />
           }
     
-    
-    
             <Weather weather={this.state.weather} ></Weather>
             <Movies  movies={this.state.movies} ></Movies>
            
           
-    
-    
-           
-            
-    
-           { 
-           this.state.showerror && 
-           this.state.error 
-           }
-    
-            
+           { this.state.showerror && this.state.error}
           </>
-    
-    
-    
-    
-    
         )
       }
     }
