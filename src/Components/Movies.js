@@ -18,11 +18,11 @@ class Movies extends React.Component {
   {Array.from({ length: 2 }).map((_, idx) => (
     <Col>
     
-      <Card style={{ width: '18rem' }}>
+      <Card  style={{ width: '18rem' }}>
     <Card.Img variant="top" src={element.poster_path} />
     <Card.Body>
       <Card.Title> {element.title} </Card.Title>
-      <Card.Text>
+      <Card.Text className="Card">
       {element.vote_average}
       <br>
       </br>
